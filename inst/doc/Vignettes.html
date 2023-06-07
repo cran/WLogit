@@ -206,9 +206,10 @@ hr {
 <body>
 <h1>Introduction</h1>
 
-<p>This package provides functions for implementing the variable selection approach in high-dimensional linear models called WLogit described in Zhu et al. (2022). This method is designed for taking into account the correlations that may exist between the predictors (columns of the design matrix). It consists in rewriting the initial high-dimensional logistic regression model to remove the correlation existing between the predictors and in applying the generalized Lasso criterion. We refer the reader to the paper for further details.</p>
+<p>This package provides functions for implementing the variable selection approach in high-dimensional linear models called WLogit described in Zhu et al. (2022). This method is designed for taking into account the correlations that may exist between the predictors (columns of the design matrix). It consists in rewriting the initial high-dimensional linear model to remove the correlation existing between the predictors and in applying the generalized Lasso criterion. We refer the reader to the paper for further details.</p>
 
-<p>Given a design matrix \({\mathbf{X}}\) of size \(n\times p\), \(X_{j}^{(i)}\) corresponds to the measurement of the $j$th biomarker on sample \(i\), and \({\boldsymbol{\beta}}=(\beta_{1},\ldots, \beta_p)^{T}\) is the vector of effect size for each biomarker, with most components equal to zero. We assume that the binary response \(y_1,y_2,&hellip;,y_n\) are independent random variables having a Bernoulli distribution with parameter \(\pi_{{\boldsymbol{\beta}}}(X^{(i)})\) (\(y_{i} \sim Bernoulli(\pi_{{\boldsymbol{\beta}}}(X^{(i)}))\)), where for all \(i\) in \(\{1,\dots,n\}\),
+<p>given a design matrix \({\mathbf{X}}\) of size \(n\times p\), \(X_{j}^{(i)}\) corresponds to the measurement of the $j$th biomarker on sample \(i\), and \({\boldsymbol{\beta}}=(\beta_{1},\ldots, \beta_p)^{T}\) is the vector of effect size for each biomarker, with most components equal to zero. We assume that the binary response \(y_1,y_2,&hellip;,y_n\) are independent random variables having a Bernoulli distribution with parameter \(\pi_{{\boldsymbol{\beta}}}(X^{(i)})\) (\(y_{i} \sim Bernoulli(\pi_{{\boldsymbol{\beta}}}(X^{(i)}))\)), %the probability for observation \(y_i =1\), i.e. \(y_i\sim\textrm{Bernoulli}(\pi_{{\boldsymbol{\beta}}}(X^{(i)}))\), 
+where for all \(i\) in \(\{1,\dots,n\}\),
 \begin{equation}\label{eq:logistic}
     \pi<em>{{\boldsymbol{\beta}}}(X<sup>{(i)})=\frac{\exp\left({\sum</sup></em>{j=1}<sup>p</sup> \beta<em>j X_j<sup>{(i)}}\right)}{1+\exp\left({\sum</sup></em>{j=1}<sup>p</sup> \beta_j X_j<sup>{(i)}}\right)}.</sup>
 \end{equation}</p>
@@ -220,7 +221,7 @@ The vector \(\boldsymbol{\beta}\) is assumed to be sparse, \textit{i.e.} a major
 
 <h2>Correlation matrix \(\boldsymbol{\Sigma}\)</h2>
 
-<p>We consider a correlation matrix having the following block structure:</p>
+<p>We consider a correlation matrix having the followwing block structure:</p>
 
 <p>\begin{equation}
      \label{eq:SPAC}
@@ -231,7 +232,7 @@ The vector \(\boldsymbol{\beta}\) is assumed to be sparse, \textit{i.e.} a major
        \end{bmatrix}
 \end{equation}</p>
 
-<p>where \(\boldsymbol{\Sigma}_{11}\) is the correlation matrix of active variables with off-diagonal entries equal to \(\alpha_1\), \(\boldsymbol{\Sigma}_{22}\) is the one of non active variables with off-diagonal entries equal to \(\alpha_3\) and \(\boldsymbol{\Sigma}_{12}\) is the correlation matrix between active and non active variables with entries equal to \(\alpha_2\). In the following example: \((\alpha_1,\alpha_2,\alpha_3)=(0.3, 0.5, 0.7)\).    </p>
+<p>where \(\boldsymbol{\Sigma}_{11}\) is the correlation matrix of active variables with off-diagonal entries equal to \(\alpha_1\), \(\boldsymbol{\Sigma}_{22}\) is the one of non active variables with off-diagonal entries equal to \(\alpha_3\) and \(\boldsymbol{\Sigma}_{12}\) is the correlation matrix between active and non active variables with entries equal to \(\alpha_2\). In the following example: \((\alpha_1,\alpha_2,\alpha_3)=(0.5, 0.7, 0.9)\).    </p>
 
 <p>The first 10 variables are active variables among the \(p=500\) variables and \(n=100\).</p>
 
@@ -250,7 +251,9 @@ diag(Sigma) &lt;- rep(1,p)
 
 <h2>Generation of \(\boldsymbol{X}\) and \(\boldsymbol{y}\)</h2>
 
-<p>The design matrix is then generated with the correlation matrix \(\boldsymbol{\Sigma}\) previously defined by using the function \texttt{mvrnorm} and the response variable \(\boldsymbol{y}\)  is generated according to model \eqref{eq:logistic} where the non null components of \(\boldsymbol{\beta}\) are equal to 1.</p>
+<p>The design matrix is then generated with the correlation matrix \(\boldsymbol{\Sigma}\) previously defined by using the function \texttt{mvrnorm} and the response variable \(\boldsymbol{y}\) 
+is generated according to the linear model \eqref{eq:mod_lin} where the non null components of
+\(\boldsymbol{\beta}\) are equal to 1.</p>
 
 <pre><code class="r">X &lt;- MASS::mvrnorm(n = n, mu=rep(0,p), Sigma, tol = 1e-6, empirical = FALSE)
 beta &lt;- rep(0,p)
@@ -278,12 +281,12 @@ y &lt;- rbinom(n,1,pr)
 
 <ul>
 <li>\texttt{beta}: matrix of the estimations of \(\boldsymbol{\beta}\) for all the \(\lambda\) considered. </li>
-<li>\texttt{beta.min}: estimation of \(\boldsymbol{\beta}\) which maximize the log-likelihood.</li>
+<li>\texttt{beta.min}: estimation of \(\boldsymbol{\beta}\) which minimize the MSE (Mean Squared Error).</li>
 <li>\texttt{log.likelihood}: Log-likelihood for all the \(\lambda\) considered.</li>
 <li>\texttt{lambda}: All \(\lambda\) considered.</li>
 </ul>
 
-<h2>Estimation of \(\boldsymbol{\beta}\) by \(\widehat{\boldsymbol{\beta}}(\lambda)\) which maximizes the log-likelihood</h2>
+<h2>Estimation of \(\boldsymbol{\beta}\) by \(\widehat{\boldsymbol{\beta}}(\lambda)\) which minimizes the Log-likelihood</h2>
 
 <pre><code class="r">beta_min &lt;- mod$beta.min
 df_beta &lt;- data.frame(beta_est=beta_min, Status = ifelse(beta==0, &quot;non-active&quot;, &quot;active&quot;))
@@ -298,12 +301,6 @@ ggplot2::ggplot(data=df_plot, mapping=aes(y=beta_est, x=index, color=Status))+ge
 <p>True Positive Rate: 1 (all active variables identified)</p>
 
 <p>False Positive Rate:  28/490 = 0.0571429</p>
-
-<p>\bigskip</p>
-
-<p>\large \textbf{References}</p>
-
-<p>[1] W. Zhu, C. Lévy-Leduc, N. Ternès. Variable selection in high-dimensional logistic regression models using a whitening approach, 2022, Arxiv: 2206.14850.</p>
 
 </body>
 

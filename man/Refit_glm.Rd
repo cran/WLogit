@@ -27,7 +27,7 @@ Binary response
 }
 
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }
 
 \examples{

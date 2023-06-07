@@ -66,7 +66,10 @@ function(X=X, y=y,
   skip_i <- TRUE
   eval_final <- c()
   defaultW <- getOption("warn") 
-
+  
+  options(warn = -1) 
+  
+  
   for(i in 1:length(gen.model0$lambda)){
     #inner loop
     epsilon=10

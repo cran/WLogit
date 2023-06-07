@@ -33,5 +33,5 @@ The grill of thresholding
 }
 
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }

@@ -21,7 +21,7 @@ This function returns the thresholded vector.
 }
 
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }
 
 \examples{

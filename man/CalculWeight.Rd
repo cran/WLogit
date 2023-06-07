@@ -18,16 +18,11 @@ The vector of estimated probability for each response to be 1.
 }
 }
 
-\value{
-Returns a vector containing the weight.
-}
-
-
 \seealso{ Please read \url{https://hastie.su.domains/Papers/glmnet.pdf} for more details
 }
 
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }
 
 \examples{

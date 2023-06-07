@@ -46,12 +46,12 @@ W. Zhu, C. Levy-Leduc, N. Ternes. "Variable selection in high-dimensional logist
 }
 
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }
 
 \examples{
-X0 <- matrix( rnorm(100*20,mean=0,sd=1), 100, 20)  
-y0 <- c(rep(1,50), rep(0,50))
+X0 <- matrix( rnorm(50*10,mean=0,sd=1), 50, 10)  
+y0 <- c(rep(1,25), rep(0,25))
 mod <- WhiteningLogit(X=X0, y=y0)
 plot(mod$beta.min)
 
@@ -127,7 +127,10 @@ function(X=X, y=y,
   skip_i <- TRUE
   eval_final <- c()
   defaultW <- getOption("warn") 
-
+  
+  options(warn = -1) 
+  
+  
   for(i in 1:length(gen.model0$lambda)){
     #inner loop
     epsilon=10

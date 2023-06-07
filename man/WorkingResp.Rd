@@ -33,5 +33,5 @@ This function returns the vector of working response.
 \seealso{ Please read \url{https://hastie.su.domains/Papers/glmnet.pdf} for more details
 }
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }

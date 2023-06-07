@@ -30,7 +30,7 @@ Whether there is the intercept
 }
 
 \author{
-Wencan Zhu
+Wencan Zhu, Celine Levy-Leduc, Nils Ternes
 }
 
 \examples{
