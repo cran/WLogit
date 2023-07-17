@@ -5,6 +5,9 @@ library(tibble)
 library(ggplot2)
 set.seed(123456)
 
+## ----install pacakge, eval=FALSE----------------------------------------------
+#  install.packages("WLogit", repos = "http://cran.us.r-project.org")
+
 ## ----generate Sigma-----------------------------------------------------------
 p <- 500 # number of variables 
 d <- 10 # number of actives
@@ -30,12 +33,19 @@ data(X)
 data(y)
 data(beta)
 
+## ----load WLogit, eval=FALSE--------------------------------------------------
+#  library(WLogit)
+
 ## ----WLogit model, eval=FALSE-------------------------------------------------
 #  mod <- WhiteningLogit(X = X, y = y)
 
 ## ---- echo=FALSE--------------------------------------------------------------
 data(test)
 mod <- test
+
+## ----beta---------------------------------------------------------------------
+beta_min <- mod$beta.min
+head(beta_min)
 
 ## ----variable selection,fig.width=4,fig.height=3------------------------------
 beta_min <- mod$beta.min
@@ -44,4 +54,20 @@ df_plot <- df_beta[which(beta_min!=0), ]
 df_plot$index <- which(beta_min!=0)
 ggplot2::ggplot(data=df_plot, mapping=aes(y=beta_est, x=index, color=Status))+geom_point()+
   theme_bw()+ylab("Estimated coefficients")+xlab("Indices of selected variables")
+
+## ----lasso--------------------------------------------------------------------
+library(glmnet)
+cvfit = cv.glmnet(X, y, family = "binomial", type.measure = "class", intercept=FALSE)
+
+## ----res lasso----------------------------------------------------------------
+beta_lasso <- coef(cvfit, s = "lambda.min")
+head(beta_lasso)
+
+## ----lasso selection,fig.width=4,fig.height=3---------------------------------
+beta_lasso <- as.vector(beta_lasso)[-1]
+df_beta <- data.frame(beta_est=beta_lasso, Status = ifelse(beta==0, "non-active", "active"))
+df_plot <- df_beta[which(beta_lasso!=0), ]
+df_plot$index <- which(beta_lasso!=0)
+ggplot2::ggplot(data=df_plot, mapping=aes(y=beta_est, x=index, color=Status))+geom_point()+
+  theme_bw()+ylab("Estimated coefficients by glmnet")+xlab("Indices of selected variables")
 

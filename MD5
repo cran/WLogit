@@ -1,4 +1,4 @@
-5a69a4771d0dbf59d335b165b37cdaec *DESCRIPTION
+e54ae8eee90606389daf7fa56b8711df *DESCRIPTION
 13e76dcccf0d129b70fda48776085164 *NAMESPACE
 f42dab9359e7375aa4b34d94ce85c302 *R/CalculPx.R
 e0cc05a1cc18c0f498f947b9baeb97a2 *R/CalculWeight.R
@@ -8,15 +8,15 @@ b23c48ccfed41f0a6427663f684e416d *R/WhiteningLogit.R
 c3f68c824c2ea4ad410cf933cd907a96 *R/WorkingResp.R
 25daaed972149abe2f65bacdd78d97f1 *R/top.R
 8ff081728be36fe5458b47f5b8cc1c83 *R/top_thresh.R
-948aac981c8bb751c190d783a021fd20 *build/partial.rdb
-e3405ce7d35417f5a0a34c61a33817e1 *build/vignette.rds
+5ae107e2f3b31473adc7439ca92dcfff *build/partial.rdb
+aae03b1598229420142b8bf87988277d *build/vignette.rds
 62a857b63866695cc6e39320117dd929 *data/X.rda
 2d71d8340733a1797c5a15b964f5e471 *data/beta.rda
 02b636194916a6abd34243aee36c3d60 *data/test.rda
 7b6f0d36b062f6a8674c7213e146e4e1 *data/y.rda
-16c628f50273d3d44f7298b3154a8094 *inst/doc/Vignettes.R
-7a45a2102f48429b4e238451db931f6d *inst/doc/Vignettes.Rmd
-96a7cf1c8cede5905ca6eb928beddbc0 *inst/doc/Vignettes.html
+b2c681384564d98dd2e62c81ed13dfe1 *inst/doc/Vignettes.R
+54e3345db84002516b68c165aee01caf *inst/doc/Vignettes.Rmd
+1f66b13c54f37450136bce8a2d22391b *inst/doc/Vignettes.pdf
 97c72e1be348fa72234e0db18a67f06f *man/CalculPx.Rd
 7a52d6e6f50dce60a2a91a5757956abb *man/CalculWeight.Rd
 7394c833daf27299b85f2807cfb0845c *man/Refit_glm.Rd
@@ -30,4 +30,5 @@ e2e469bdc57c9c1d1a1005440e1cce0f *man/WorkingResp.Rd
 f21a5bd8994834de340d9c67bfa18d38 *man/top.Rd
 b47484d56f135b23247fbb2e2d3aaa98 *man/top_thresh.Rd
 0ead9d796387a6a8a1d975ad5884f8d6 *man/y.Rd
-7a45a2102f48429b4e238451db931f6d *vignettes/Vignettes.Rmd
+54e3345db84002516b68c165aee01caf *vignettes/Vignettes.Rmd
+45dd998bbf10016745cf3dae495051a3 *vignettes/Vignettes.html

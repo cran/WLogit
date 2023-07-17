@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>WLogit package</title>
+<style type="text/css">
+/**
+ * Prism.s theme ported from highlight.js's xcode style
+ */
+pre code {
+  padding: 1em;
+}
+.token.comment {
+  color: #007400;
+}
+.token.punctuation {
+  color: #999;
+}
+.token.tag,
+.token.selector {
+  color: #aa0d91;
+}
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #1c00cf;
+}
+.token.property,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: #c41a16;
+}
+.token.inserted {
+  background-color: #ccffd8;
+}
+.token.deleted {
+  background-color: #ffebe9;
+}
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.style .token.string {
+  color: #9a6e3a;
+}
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #836c28;
+}
+.token.function,
+.token.class-name {
+  color: #DD4A68;
+}
+.token.regex,
+.token.important,
+.token.variable {
+  color: #5c2699;
+}
+.token.important,
+.token.bold {
+  font-weight: bold;
+}
+.token.italic {
+  font-style: italic;
+}
+</style>
+<style type="text/css">
+body {
+  font-family: sans-serif;
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+body, .footnotes, code { font-size: .9em; }
+li li { font-size: .95em; }
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+pre, img { max-width: 100%; }
+pre, pre:hover {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+pre code {
+  display: block;
+  overflow-x: auto;
+}
+code { font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace; }
+:not(pre) > code, code[class] { background-color: #F8F8F8; }
+code.language-undefined, pre > code:not([class]) {
+  background-color: inherit;
+  border: 1px solid #eee;
+}
+table {
+  margin: auto;
+  border-top: 1px solid #666;
+}
+table thead th { border-bottom: 1px solid #ddd; }
+th, td { padding: 5px; }
+thead, tfoot, tr:nth-child(even) { background: #eee; }
+blockquote {
+  color: #666;
+  margin: 0;
+  padding-left: 1em;
+  border-left: 0.5em solid #eee;
+}
+hr, .footnotes::before { border: 1px dashed #ddd; }
+.frontmatter { text-align: center; }
+#TOC .numbered li { list-style: none; }
+#TOC .numbered { padding-left: 0; }
+#TOC .numbered ul { padding-left: 1em; }
+table, .body h2 { border-bottom: 1px solid #666; }
+.body .appendix, .appendix ~ h2 { border-bottom-style: dashed; }
+.footnote-ref a::before { content: "["; }
+.footnote-ref a::after { content: "]"; }
+.footnotes::before {
+  content: "";
+  display: block;
+  max-width: 20em;
+}
+
+@media print {
+  body {
+    font-size: 12pt;
+    max-width: 100%;
+  }
+  tr, img { page-break-inside: avoid; }
+}
+@media only screen and (min-width: 992px) {
+  pre { white-space: pre; }
+}
+</style>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+</head>
+<body>
+<div class="include-before">
+</div>
+<div class="frontmatter">
+<div class="title"><h1>WLogit package</h1></div>
+<div class="author"><h2>Wencan Zhu</h2></div>
+<div class="date"><h3></h3></div>
+</div>
+<div class="body">
+<h1 id="introduction">Introduction</h1>
+<p>This package provides functions for implementing the variable selection approach in high-dimensional linear models called WLogit described in Zhu et al. (2022). This method is designed for taking into account the correlations that may exist between the predictors (columns of the design matrix). It consists in rewriting the initial high-dimensional logistic regression model to remove the correlation existing between the predictors and in applying the generalized Lasso criterion. We refer the reader to [1] for further details.</p>
+<p>Given a design matrix \({\mathbf{X}}\) of size \(n\times p\), \(X_{j}^{(i)}\) corresponds to the measurement of the \(j\)th biomarker on sample \(i\), and \({\boldsymbol{\beta}}=(\beta_{1},\ldots, \beta_p)^{T}\) is the vector of effect size for each biomarker, with most components equal to zero. We assume that the binary response \(y_1,y_2,...,y_n\) are independent random variables having a Bernoulli distribution with parameter \(\pi_{{\boldsymbol{\beta}}}(X^{(i)})\) ($y_{i} \sim Bernoulli(\pi_{{\boldsymbol{\beta}}}(X^{(i)}))$), where for all \(i\) in \(\{1,\dots,n\}\),
+\begin{equation}\label{eq:logistic}
+\pi_{{\boldsymbol{\beta}}}(X^{(i)})=\frac{\exp\left({\sum_{j=1}^p \beta_j X_j^{(i)}}\right)}{1+\exp\left({\sum_{j=1}^p \beta_j X_j^{(i)}}\right)}.
+\end{equation}</p>
+<p>The rows of \(\boldsymbol{X}\) are assumed to be the realizations of independent centered Gaussian random vectors having a covariance matrix equal to \(\boldsymbol{\Sigma}\).
+The vector \(\boldsymbol{\beta}\) is assumed to be sparse, \textit{i.e.} a majority of its components is equal to zero. The goal of the WLoigt approach is to retrieve the indices of the nonzero components of \(\boldsymbol{\beta}\), also called active variables.</p>
+<h1 id="installation">Installation</h1>
+<p>To obtain WLogit, the simplest approach is to install it directly from the CRAN (Comprehensive R Archive Network) using the following command:</p>
+<pre><code class="language-r">install.packages(&quot;WLogit&quot;, repos = &quot;http://cran.us.r-project.org&quot;)
+</code></pre>
+<p>Alternatively, users can download the package source at <a href="https://CRAN.R-project.org/package=WLogit">https://CRAN.R-project.org/package=WLogit</a> and download the 	WLogit_2.0.tar.gz file.</p>
+<h1 id="data-generation">Data generation</h1>
+<h2 id="correlation-matrix-boldsymbol-sigma">Correlation matrix \(\boldsymbol{\Sigma}\)</h2>
+<p>We consider a correlation matrix having the following block structure:</p>
+<p>\begin{equation}
+\label{eq:SPAC}
+\boldsymbol{\Sigma}=
+\begin{bmatrix}
+\boldsymbol{\Sigma}<em>{11} &amp;  \boldsymbol{\Sigma}</em>{12} \
+\boldsymbol{\Sigma}<em>{12}^{T} &amp;  \boldsymbol{\Sigma}</em>{22}
+\end{bmatrix}
+\end{equation}</p>
+<p>where \(\boldsymbol{\Sigma}_{11}\) is the correlation matrix of active variables with off-diagonal entries equal to \(\alpha_1\), \(\boldsymbol{\Sigma}_{22}\) is the one of non active variables with off-diagonal entries equal to \(\alpha_3\) and \(\boldsymbol{\Sigma}_{12}\) is the correlation matrix between active and non active variables with entries equal to \(\alpha_2\). In the following example: \((\alpha_1,\alpha_2,\alpha_3)=(0.3, 0.5, 0.7)\).</p>
+<p>The first 10 variables are active variables among the \(p=500\) variables and \(n=100\).</p>
+<pre><code class="language-r">p &lt;- 500 # number of variables 
+d &lt;- 10 # number of actives
+n &lt;- 100 # number of samples
+actives &lt;- c(1:d)
+nonacts &lt;- c(1:p)[-actives]
+Sigma &lt;- matrix(0, p, p)
+Sigma[actives, actives] &lt;- 0.3
+Sigma[-actives, actives] &lt;- 0.5
+Sigma[actives, -actives] &lt;- 0.5
+Sigma[-actives, -actives] &lt;- 0.7
+diag(Sigma) &lt;- rep(1,p)
+</code></pre>
+<h2 id="generation-of-boldsymbol-x-and-boldsymbol-y">Generation of \(\boldsymbol{X}\) and \(\boldsymbol{y}\)</h2>
+<p>The design matrix is then generated with the correlation matrix \(\boldsymbol{\Sigma}\) previously defined by using the function \texttt{mvrnorm} and the response variable \(\boldsymbol{y}\)  is generated according to model \eqref{eq:logistic} where the non null components of \(\boldsymbol{\beta}\) are equal to 1.</p>
+<pre><code class="language-r">X &lt;- MASS::mvrnorm(n = n, mu=rep(0,p), Sigma, tol = 1e-6, empirical = FALSE)
+beta &lt;- rep(0,p)
+beta[actives] &lt;- 1
+pr &lt;- CalculPx(X,beta=beta)
+y &lt;- rbinom(n,1,pr) 
+</code></pre>
+<h1 id="variable-selection-with-the-package">Variable selection with the package</h1>
+<p>With the previous \(\boldsymbol{X}\) and \(\boldsymbol{y}\), the function \verb|WhiteningLogit| of the package can be used to select the active variables.</p>
+<p>First, we load the WLogit package:</p>
+<pre><code class="language-r">library(WLogit)
+</code></pre>
+<p>We fit the model using the most basic call to \verb|WhiteningLogit|</p>
+<pre><code class="language-r">mod &lt;- WhiteningLogit(X = X, y = y)
+</code></pre>
+<p>“mod” is a list that contains all the relevant information of the fitted model for future use. Note that the argument \verb|y| needs to be binary and only contains 0 or 1.</p>
+<p>Additional arguments:</p>
+<ul>
+<li>\texttt{nlambda}: number of lambda to be considered, the default value is 50.</li>
+<li>\texttt{gamma}: parameter described in the paper. Its default value is 0.999.</li>
+<li>\texttt{maxit}: integer specifying the maximum number of steps for the iteration in the Iterative Re-weighted Least Square algorithm. Its default value is 100.</li>
+</ul>
+<p>Outputs:</p>
+<ul>
+<li>\texttt{beta}: matrix of the estimations of \(\boldsymbol{\beta}\) for all the \(\lambda\) considered.</li>
+<li>\texttt{beta.min}: estimation of \(\boldsymbol{\beta}\) which maximizes the log-likelihood.</li>
+<li>\texttt{log.likelihood}: Log-likelihood for all the \(\lambda\) considered.</li>
+<li>\texttt{lambda}: All \(\lambda\) considered.</li>
+</ul>
+<h2 id="estimation-of-boldsymbol-beta-by-widehat-boldsymbol-beta-lambda-which-maximizes-the-log-likelihood">Estimation of \(\boldsymbol{\beta}\) by \(\widehat{\boldsymbol{\beta}}(\lambda)\) which maximizes the log-likelihood</h2>
+<p>We show the first elements in estimated coefficients:</p>
+<pre><code class="language-r">beta_min &lt;- mod$beta.min
+head(beta_min)
+</code></pre>
+<pre><code>## [1] 0.01936466 0.03482722 0.02587475 0.02869973 0.03849732 0.03735274
+</code></pre>
+<p>Focusing on selected variables, we show which of them are truly active ones (red) and which are false positives (blue).</p>
+<pre><code class="language-r">beta_min &lt;- mod$beta.min
+df_beta &lt;- data.frame(beta_est=beta_min, Status = ifelse(beta==0, &quot;non-active&quot;, &quot;active&quot;))
+df_plot &lt;- df_beta[which(beta_min!=0), ]
+df_plot$index &lt;- which(beta_min!=0)
+ggplot2::ggplot(data=df_plot, mapping=aes(y=beta_est, x=index, color=Status))+geom_point()+
+  theme_bw()+ylab(&quot;Estimated coefficients&quot;)+xlab(&quot;Indices of selected variables&quot;)
+</code></pre>
+<p>![plot of chunk variable selection](figure/variable selection-1.png)</p>
+<p>True Positive Rate: 1 (all active variables identified)</p>
+<p>False Positive Rate:  28/490 = 0.0571429</p>
+<p>In this example, we have successfully selected all the true positives and only included 28 false positives out of the 490, which resulted in FPR equal to 0.057.</p>
+<h2 id="compare-to-lasso">Compare to Lasso</h2>
+<p>Next we compare to Lasso by using the \verb|glmnet| package with logistic regression. Glmnet is a package that fits a generalized linear model via penalized maximum likelihood. The regularization path is computed for the lasso or elastic-net penalty at a grid of values for the regularization parameter lambda. To select the optimized parameter, cross-validation is used and implemented by the function \verb|cv.glmnet|. More details about this package can be found in its vignette (Friedman et al. (2010)).</p>
+<pre><code class="language-r">library(glmnet)
+cvfit = cv.glmnet(X, y, family = &quot;binomial&quot;, type.measure = &quot;class&quot;, intercept=FALSE)
+</code></pre>
+<p>\verb|lambda.min| is the value of lambda that gives minimum mean cross-validated error.</p>
+<pre><code class="language-r">beta_lasso &lt;- coef(cvfit, s = &quot;lambda.min&quot;)
+head(beta_lasso)
+</code></pre>
+<pre><code>## 6 x 1 sparse Matrix of class &quot;dgCMatrix&quot;
+##                     s1
+## (Intercept)  .        
+## V1           .        
+## V2           .        
+## V3           0.3869045
+## V4           .        
+## V5          -0.1879081
+</code></pre>
+<p>Finally we evaluate on variables selected by Lasso.</p>
+<pre><code class="language-r">beta_lasso &lt;- as.vector(beta_lasso)[-1]
+df_beta &lt;- data.frame(beta_est=beta_lasso, Status = ifelse(beta==0, &quot;non-active&quot;, &quot;active&quot;))
+df_plot &lt;- df_beta[which(beta_lasso!=0), ]
+df_plot$index &lt;- which(beta_lasso!=0)
+ggplot2::ggplot(data=df_plot, mapping=aes(y=beta_est, x=index, color=Status))+geom_point()+
+  theme_bw()+ylab(&quot;Estimated coefficients by glmnet&quot;)+xlab(&quot;Indices of selected variables&quot;)
+</code></pre>
+<p>![plot of chunk lasso selection](figure/lasso selection-1.png)</p>
+<p>The selection accuracy of Lasso:</p>
+<p>True Positive Rate: 5/10 = 0.5</p>
+<p>False Positive Rate:  20/490 = 0.0408163</p>
+<p>Lasso selected only five true positives including one with wrong sign.</p>
+<p>We provide a compelling demonstration with this example, showcasing the effectiveness of our method (implemented in the WLogit package) in scenarios where the covariables exhibit high correlation and the irrepresentable condition is violated. In such challenging situations, our method outperforms the Lasso approach by successfully identifying all the true active cases with the correct sign. This outcome highlights the robustness and superiority of our method, even when faced with complex correlation patterns and violations of the irrepresentable condition.</p>
+<p>\bigskip</p>
+<p>\large \textbf{References}</p>
+<p>[1] Zhu, W., Lévy-Leduc, C., &amp; Ternès, N. (2022). Variable selection in high-dimensional logistic regression models using a whitening approach, Arxiv: 2206.14850.</p>
+<p>[2] Friedman, J. H., Hastie, T., &amp; Tibshirani, R. (2010). Regularization Paths for Generalized Linear Models via Coordinate Descent. Journal of Statistical Software, 33(1), 1–22.</p>
+</div>
+<div class="include-after">
+</div>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/combine/npm/katex/dist/katex.min.js,npm/katex/dist/contrib/auto-render.min.js,npm/@xiee/utils/js/render-katex.js" defer></script>
+</body>
+</html>
